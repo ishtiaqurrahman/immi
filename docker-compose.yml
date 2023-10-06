@@ -4,7 +4,8 @@ services:
   immich-server:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    network_mode: "host"
+    networks:
+      hostnet: {}
     command: ["start.sh", "immich"]
     volumes:
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
@@ -47,7 +48,8 @@ services:
   immich-web:
     container_name: immich_web
     image: ghcr.io/immich-app/immich-web:${IMMICH_VERSION:-release}
-    network_mode: "host"
+    networks:
+      hostnet: {}
     env_file:
       - .env
     restart: always
@@ -85,7 +87,8 @@ services:
   immich-proxy:
     container_name: immich_proxy
     image: ghcr.io/immich-app/immich-proxy:${IMMICH_VERSION:-release}
-    network_mode: "host"
+    networks:
+      hostnet: {}
     environment:
       # Make sure these values get passed through from the env file
       - IMMICH_SERVER_URL
@@ -101,3 +104,8 @@ volumes:
   pgdata:
   model-cache:
   tsdata:
+  
+networks:
+  hostnet:
+    external: true
+    name: host
